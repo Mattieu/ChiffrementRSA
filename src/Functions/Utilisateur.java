@@ -1,8 +1,7 @@
+package Functions;
+
 import java.math.BigInteger;
 
-/**
- * Created by etudiant on 15/01/16.
- */
 public class Utilisateur {
 
     private String name;
@@ -20,4 +19,12 @@ public class Utilisateur {
        exposantPublic = publicKey[1];
        indicatriceEuler = publicKey[2];
    }
+
+    public BigInteger getExposantPublic() {
+        return exposantPublic;
+    }
+
+    public BigInteger getN() {
+        return n;
+    }
 }

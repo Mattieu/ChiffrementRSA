@@ -1,9 +1,11 @@
+package Functions;
+
 import java.math.BigInteger;
 import java.util.Random;
 
 public class Functions {
 
-    public static final int BIT_LENGTH_PUBLIC = 10;
+    public static final int BIT_LENGTH_PUBLIC = 100;
 
     public static BigInteger[] createPublicKey() {
 
