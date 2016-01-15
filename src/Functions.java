@@ -23,7 +23,7 @@ public class Functions {
         } while (!m.gcd(e).equals(BigInteger.ONE));
 
 
-        BigInteger[] resultat = {n, e};
+        BigInteger[] resultat = {n, e, m};
         return resultat;
     }
 }
