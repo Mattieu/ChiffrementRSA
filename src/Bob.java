@@ -1,9 +1,8 @@
 import Functions.Functions;
 import Functions.Utilisateur;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
+import java.math.BigInteger;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -21,11 +20,12 @@ public class Bob {
 
         // Création de la clef publique et privée
         utilisateur.setPublicKey(Functions.createPublicKey());
+        utilisateur.setPrivateKey(Functions.createPrivateKey(utilisateur.getN(), utilisateur.getExposantPublic(), utilisateur.getIndicatriceEuler()));
     }
 
     private void run() {
-        PrintWriter out = null;
-        BufferedReader in = null;
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
 
         try {
             ServerSocket server = new ServerSocket(30970);
@@ -33,17 +33,28 @@ public class Bob {
 
             createKeys();
 
-            out = new PrintWriter(client.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            out = new ObjectOutputStream(client.getOutputStream());
+            in = new ObjectInputStream(client.getInputStream());
 
-            String line;
+            BigInteger eAlice =  (BigInteger) in.readObject();
+            BigInteger nAlice =  (BigInteger) in.readObject();
+            utilisateur.setCorrespondant(eAlice, nAlice);
+            out.writeUTF("RECU");
+            out.flush();
+
+            out.writeObject(utilisateur.getExposantPublic());
+            out.flush();
+
+            out.writeObject(utilisateur.getN());
+            out.flush();
+
+           /* String line;
             while (true) {
                 line = in.readLine();
                 if (line.equals("STOP")) break;
                 System.out.println("client send> " + line);
-                out.println("hello client");
             }
-
+*/
             out.close();
             in.close();
             client.close();

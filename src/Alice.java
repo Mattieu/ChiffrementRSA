@@ -7,7 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.*;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.Socket;
 
@@ -36,44 +38,44 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
 
         // Création de la clef publique et privée
         utilisateur.setPublicKey(Functions.createPublicKey());
+        utilisateur.setPrivateKey(Functions.createPrivateKey(utilisateur.getN(), utilisateur.getExposantPublic(), utilisateur.getIndicatriceEuler()));
     }
 
     private void run () {
         try {
             Socket s = new Socket("localhost", 30970);
 
+            out = new ObjectOutputStream(s.getOutputStream());
+            in = new ObjectInputStream(s.getInputStream());
+
             createInterface();
 
             createKeys();
 
-            tReceived.setText(tReceived.getText() + "Création des clefs publiques" + "\n");
-            tReceived.setText(tReceived.getText() + "Création des clefs privées" + "\n");
+            tReceived.setText(tReceived.getText() + " - Création des clefs publiques" + "\n");
+            tReceived.setText(tReceived.getText() + " - Création des clefs privées" + "\n");
 
-            out = new ObjectOutputStream(s.getOutputStream());
-            in = new ObjectInputStream(s.getInputStream());
+            tReceived.setText(tReceived.getText() + " - Envoie de la clef publique d'Alice" + "\n");
 
-            tReceived.setText(tReceived.getText() + "Envoie de la clef publique d'Alice" + "\n");
-            out.writeObject(utilisateur.getN());
             out.writeObject(utilisateur.getExposantPublic());
+            out.flush();
 
-            if (in.readUTF() == "RECU") {
-                tReceived.setText(tReceived.getText() + "Clef publique d'Alice reçu par Bob" + "\n");
+            out.writeObject(utilisateur.getN());
+            out.flush();
+
+            if (in.readUTF().equals("RECU")) {
+                tReceived.setText(tReceived.getText() + " - Clef publique d'Alice reçu par Bob" + "\n");
             }
 
-            tReceived.setText(tReceived.getText() + "Envoie de la clef publique de Bob" + "\n");
+            tReceived.setText(tReceived.getText() + " - Envoie de la clef publique de Bob" + "\n");
+            BigInteger eBob =  (BigInteger) in.readObject();
+            BigInteger nBob =  (BigInteger) in.readObject();
 
+            utilisateur.setCorrespondant(eBob, nBob);
 
-            while (true) {
-                String reponse = in.readLine();
+            tReceived.setText(tReceived.getText() + " - Clef publique de Bob reçu par Alice" + "\n");
 
-                if (reponse.equals("QUIT")) {
-                    out.println("QUIT");
-                    out.flush();
-                    break;
-                }
-
-                tReceived.setText(tReceived.getText() + reponse + "\n");
-            }
+            bSend.setEnabled(true);
 
             out.close();
             in.close();
@@ -96,6 +98,7 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
         // Bouton Saisie et Saisie + Listener
         bSend = new JButton("Encode");
         bSend.addActionListener(this);
+        bSend.setEnabled(false);
 
         // Fenetre
         JPanel bottomPanel = new JPanel();
@@ -118,16 +121,29 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
         setVisible(true);
     }
 
+
+
     @Override
     public void actionPerformed(ActionEvent arg0) {
-
         if (arg0.getSource() == bSend) {
             if (tSend.getText().trim().length() > 0) {
-                out.println(tSend.getText());
-                out.flush();
+                tReceived.setText(tReceived.getText() + " - Chiffrement du Texte: " + tSend.getText() + "\n");
+                tReceived.setText(tReceived.getText() + " - Résultat du chiffrement: " + tSend.getText() + "!\n");
+
+                try {
+                    BigInteger[] encode = Functions.encode(tSend.getText(), utilisateur.getExposantPublicCorrespondant(), utilisateur.getNCorrespondant());
+                } catch (UnsupportedEncodingException e) {
+                    tReceived.setText(tReceived.getText() + " - Erreur lors de l'encodage du mot: " + tSend.getText() + "!\n");
+                }
+                tSend.setEnabled(false);
+                bSend.setEnabled(false);
                 tSend.setText("");
             }
         }
+
+
+        /* out.writeUTF(tSend.getText());
+                out.flush();*/
     }
 
     @Override
@@ -137,8 +153,7 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
 
     @Override
     public void windowClosing(WindowEvent windowEvent) {
-        out.println("QUIT");
-        out.flush();
+        System.exit(0);
     }
 
     @Override

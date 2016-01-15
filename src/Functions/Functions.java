@@ -1,5 +1,6 @@
 package Functions;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.Random;
 
@@ -34,7 +35,7 @@ public class Functions {
         else return pgcd(q, p.divide(q));
     }*/
 
-    public static BigInteger[] createPrivateKey(BigInteger e, BigInteger m, BigInteger n) {
+    public static BigInteger[] createPrivateKey(BigInteger n, BigInteger e, BigInteger m) {
 
         BigInteger e0 = e;
         BigInteger m0 = m;
@@ -63,5 +64,20 @@ public class Functions {
 
         return privateKey;
 
+    }
+
+    private static byte[] convertInAscii(String s) throws UnsupportedEncodingException {
+        return s.getBytes("ASCII");
+    }
+
+    public static BigInteger[] encode(String s, BigInteger e, BigInteger n) throws UnsupportedEncodingException {
+        byte[] ascii = convertInAscii(s);
+
+        BigInteger [] encode = new BigInteger[ascii.length];
+        for (int i = 0; i < ascii.length; i++) {
+            encode[i] = (BigInteger.valueOf(ascii[i]).modPow(e, n));
+        }
+
+        return encode;
     }
 }
