@@ -10,6 +10,7 @@ import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.Socket;
 
@@ -30,6 +31,13 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
     }
 
     public Alice() {
+
+        try {
+            Functions.decode();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         run();
     }
 
@@ -108,6 +116,9 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
     }
 
     protected void createInterface() {
+
+        setTitle("Chiffrement RSA");
+
         // Affichage
         tReceived = new JTextArea(10, 40);
         tReceived.setEditable(false);

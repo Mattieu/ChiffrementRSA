@@ -6,6 +6,23 @@ import java.util.Random;
 
 public class Functions {
 
+    public static String decode() throws UnsupportedEncodingException {
+        StringBuilder s = new StringBuilder();
+
+        BigInteger n = BigInteger.valueOf(5141);
+        BigInteger u = BigInteger.valueOf(4279);
+
+        BigInteger test [] = {BigInteger.valueOf(386), BigInteger.valueOf(737), BigInteger.valueOf(970), BigInteger.valueOf(204), BigInteger.valueOf(1858)};
+
+        for (int i = 0; i < test.length; i++) {
+            byte[] arrayByte = test[i].modPow(u, n).toByteArray();
+            s.append(new String(arrayByte));
+        }
+        System.out.print("Déchiffrement: " + s.toString() + "\n");
+        return s.toString();
+    }
+
+
     public static final int BIT_LENGTH_PUBLIC = 100;
 
     public static BigInteger[] createPublicKey() {
@@ -87,8 +104,8 @@ public class Functions {
         StringBuilder s = new StringBuilder();
 
         for (int i = 0; i < decode.length; i++) {
-            byte[] arrayByte = decode[i].modPow(n, u).toByteArray();
-            s.append(new String(arrayByte, "UTF-8"));
+            byte[] arrayByte = decode[i].modPow(u, n).toByteArray();
+            s.append(new String(arrayByte));
         }
         System.out.print("Déchiffrement: " + s.toString() + "\n");
         return s.toString();
