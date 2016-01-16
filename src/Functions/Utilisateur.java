@@ -9,6 +9,7 @@ public class Utilisateur {
     private BigInteger n;
     private BigInteger exposantPublic;
     private BigInteger indicatriceEuler;
+
     private BigInteger u;
 
     private BigInteger nCorrespondant;
@@ -25,7 +26,7 @@ public class Utilisateur {
     }
 
     public void setPrivateKey(BigInteger[] privateKey) {
-        u = privateKey[1];
+        u = privateKey[0];
     }
 
     public void setCorrespondant(BigInteger e, BigInteger n) {
@@ -33,6 +34,9 @@ public class Utilisateur {
         nCorrespondant = n;
     }
 
+    public BigInteger getU() {
+        return u;
+    }
 
     public BigInteger getExposantPublic() {
         return exposantPublic;

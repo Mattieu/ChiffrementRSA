@@ -83,11 +83,11 @@ public class Functions {
         return encode;
     }
 
-    public static String decode(BigInteger[] decode, BigInteger e, BigInteger n) throws UnsupportedEncodingException {
+    public static String decode(BigInteger[] decode, BigInteger u, BigInteger n) throws UnsupportedEncodingException {
         StringBuilder s = new StringBuilder();
 
         for (int i = 0; i < decode.length; i++) {
-            byte[] arrayByte = decode[i].modPow(e, n).toByteArray();
+            byte[] arrayByte = decode[i].modPow(n, u).toByteArray();
             s.append(new String(arrayByte, "UTF-8"));
         }
         System.out.print("Déchiffrement: " + s.toString() + "\n");

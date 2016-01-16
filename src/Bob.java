@@ -60,7 +60,7 @@ public class Bob {
                 out.writeUTF("RECU");
                 out.flush();
 
-                String decode = Functions.decode(encode, utilisateur.getExposantPublic(), utilisateur.getN());
+                String decode = Functions.decode(encode, utilisateur.getU(), utilisateur.getN());
 
                 out.writeUTF("DECODE");
                 out.flush();
