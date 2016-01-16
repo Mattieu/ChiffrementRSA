@@ -14,7 +14,6 @@ public class Utilisateur {
     private BigInteger nCorrespondant;
     private BigInteger exposantPublicCorrespondant;
 
-
     public Utilisateur(String name) {
         this.name = name;
     }

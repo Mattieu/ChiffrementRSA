@@ -73,11 +73,24 @@ public class Functions {
     public static BigInteger[] encode(String s, BigInteger e, BigInteger n) throws UnsupportedEncodingException {
         byte[] ascii = convertInAscii(s);
 
+        System.out.print("Chiffrement du texte: " + s + "\n");
         BigInteger [] encode = new BigInteger[ascii.length];
         for (int i = 0; i < ascii.length; i++) {
             encode[i] = (BigInteger.valueOf(ascii[i]).modPow(e, n));
+            System.out.print(encode[i]+" ");
         }
-
+        System.out.print("\n");
         return encode;
+    }
+
+    public static String decode(BigInteger[] decode, BigInteger e, BigInteger n) throws UnsupportedEncodingException {
+        StringBuilder s = new StringBuilder();
+
+        for (int i = 0; i < decode.length; i++) {
+            byte[] arrayByte = decode[i].modPow(e, n).toByteArray();
+            s.append(new String(arrayByte, "UTF-8"));
+        }
+        System.out.print("Déchiffrement: " + s.toString() + "\n");
+        return s.toString();
     }
 }

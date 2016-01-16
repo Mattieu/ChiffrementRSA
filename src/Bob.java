@@ -48,21 +48,32 @@ public class Bob {
             out.writeObject(utilisateur.getN());
             out.flush();
 
-           /* String line;
             while (true) {
-                line = in.readLine();
-                if (line.equals("STOP")) break;
-                System.out.println("client send> " + line);
+                if (in.readUTF().equals("QUIT")) {
+                    out.writeUTF("QUIT");
+                    out.flush();
+                    break;
+                }
+
+                BigInteger[] encode = (BigInteger[]) in.readObject();
+
+                out.writeUTF("RECU");
+                out.flush();
+
+                String decode = Functions.decode(encode, utilisateur.getExposantPublic(), utilisateur.getN());
+
+                out.writeUTF("DECODE");
+                out.flush();
+
+                out.writeObject(Functions.encode(decode, utilisateur.getExposantPublicCorrespondant(), utilisateur.getNCorrespondant()));
+                out.flush();
             }
-*/
+
             out.close();
             in.close();
             client.close();
 
-            server.close();
-
         } catch(Exception e) {
-            System.err.println(e);
         }
     }
 
