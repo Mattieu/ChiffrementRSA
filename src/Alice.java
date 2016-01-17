@@ -113,7 +113,7 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
         setTitle("Chiffrement RSA");
 
         // Affichage
-        tReceived = new JTextArea(10, 40);
+        tReceived = new JTextArea(20, 50);
         tReceived.setEditable(false);
         JScrollPane scroll = new JScrollPane(tReceived);
 
@@ -151,7 +151,7 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
     public void actionPerformed(ActionEvent arg0) {
         if (arg0.getSource() == bSend) {
             if (tSend.getText().trim().length() > 0) {
-                tReceived.setText(tReceived.getText() + " - Chiffrement du Texte: " + tSend.getText() + "\n");
+                tReceived.setText(tReceived.getText() + "\n - Chiffrement du Texte: " + tSend.getText() + "\n");
                 try {
                     out.writeUTF("OK");
                     out.flush();
