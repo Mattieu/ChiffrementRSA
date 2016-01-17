@@ -75,6 +75,7 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
             tReceived.setText(tReceived.getText() + " - Clef publique de Bob reçu par Alice" + "\n");
 
             bSend.setEnabled(true);
+            tSend.setEnabled(true);
 
             while (true) {
                 if (in.readUTF().equals("QUIT")) {
@@ -93,6 +94,7 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
                 String decode = Functions.decode(encode, utilisateur.getU(), utilisateur.getN());
                 tReceived.setText(tReceived.getText() + " - Texte déchiffré par Alice: " + decode + "\n");
 
+                tSend.setEnabled(true);
                 bSend.setEnabled(true);
             }
 
@@ -117,6 +119,7 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
 
         // Saisie
         tSend = new JTextField(30);
+        tSend.setEnabled(false);
 
         // Bouton Saisie et Saisie + Listener
         bSend = new JButton("Encode");
@@ -156,7 +159,6 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
                     out.writeObject(Functions.encode(tSend.getText(), utilisateur.getExposantPublicCorrespondant(), utilisateur.getNCorrespondant()));
                     out.flush();
                 } catch (java.io.IOException e) {
-                    System.out.print(e.getMessage());
                     tReceived.setText(tReceived.getText() + " - Erreur lors de l'encodage du mot: " + tSend.getText() + "\n");
                 }
                 tSend.setEnabled(false);
