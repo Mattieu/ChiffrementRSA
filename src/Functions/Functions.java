@@ -2,26 +2,10 @@ package Functions;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.util.Objects;
 import java.util.Random;
 
 public class Functions {
-
-    public static String decode() throws UnsupportedEncodingException {
-        StringBuilder s = new StringBuilder();
-
-        BigInteger n = BigInteger.valueOf(5141);
-        BigInteger u = BigInteger.valueOf(4279);
-
-        BigInteger test [] = {BigInteger.valueOf(386), BigInteger.valueOf(737), BigInteger.valueOf(970), BigInteger.valueOf(204), BigInteger.valueOf(1858)};
-
-        for (int i = 0; i < test.length; i++) {
-            byte[] arrayByte = test[i].modPow(u, n).toByteArray();
-            s.append(new String(arrayByte));
-        }
-        System.out.print("Déchiffrement: " + s.toString() + "\n");
-        return s.toString();
-    }
-
 
     public static final int BIT_LENGTH_PUBLIC = 100;
 
@@ -32,7 +16,7 @@ public class Functions {
 
         do {
             q = BigInteger.probablePrime(BIT_LENGTH_PUBLIC, new Random());
-        } while (p == q);
+        } while (Objects.equals(p, q));
 
         BigInteger n = p.multiply(q);
         BigInteger m = (p.subtract(BigInteger.ONE)).multiply(q.subtract(BigInteger.ONE));
@@ -42,19 +26,11 @@ public class Functions {
             e = BigInteger.probablePrime(BIT_LENGTH_PUBLIC, new Random());
         } while (!m.gcd(e).equals(BigInteger.ONE));
 
-
-        BigInteger[] resultat = {n, e, m};
-        return resultat;
+        return new BigInteger[]{n, e, m};
     }
-
-    /*$public static BigInteger pgcd(BigInteger p, BigInteger q) {
-        if (q == 0) return p;
-        else return pgcd(q, p.divide(q));
-    }*/
 
     public static BigInteger[] createPrivateKey(BigInteger n, BigInteger e, BigInteger m) {
 
-        BigInteger e0 = e;
         BigInteger m0 = m;
         BigInteger p = BigInteger.valueOf(1);
         BigInteger q = BigInteger.valueOf(0);
@@ -77,10 +53,7 @@ public class Functions {
         }
         BigInteger u = m0.add(p);
 
-        BigInteger[] privateKey = {n,u};
-
-        return privateKey;
-
+        return new BigInteger[]{n,u};
     }
 
     private static byte[] convertInAscii(String s) throws UnsupportedEncodingException {
@@ -103,8 +76,8 @@ public class Functions {
     public static String decode(BigInteger[] decode, BigInteger u, BigInteger n) throws UnsupportedEncodingException {
         StringBuilder s = new StringBuilder();
 
-        for (int i = 0; i < decode.length; i++) {
-            byte[] arrayByte = decode[i].modPow(u, n).toByteArray();
+        for (BigInteger aDecode : decode) {
+            byte[] arrayByte = aDecode.modPow(u, n).toByteArray();
             s.append(new String(arrayByte));
         }
         System.out.print("Déchiffrement: " + s.toString() + "\n");

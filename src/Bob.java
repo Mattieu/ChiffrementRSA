@@ -24,17 +24,14 @@ public class Bob {
     }
 
     private void run() {
-        ObjectOutputStream out = null;
-        ObjectInputStream in = null;
-
         try {
             ServerSocket server = new ServerSocket(30970);
             Socket client = server.accept();
 
             createKeys();
 
-            out = new ObjectOutputStream(client.getOutputStream());
-            in = new ObjectInputStream(client.getInputStream());
+            ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(client.getInputStream());
 
             BigInteger eAlice =  (BigInteger) in.readObject();
             BigInteger nAlice =  (BigInteger) in.readObject();
@@ -73,7 +70,7 @@ public class Bob {
             in.close();
             client.close();
 
-        } catch(Exception e) {
+        } catch(Exception ignored) {
         }
     }
 

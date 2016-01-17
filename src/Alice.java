@@ -10,7 +10,6 @@ import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.Socket;
 
@@ -23,21 +22,13 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
     protected JButton bSend;
 
     private ObjectOutputStream out = null;
-    private ObjectInputStream in = null;
-    
+
 
     public static void main(String[] args) {
         new Alice();
     }
 
     public Alice() {
-
-        try {
-            Functions.decode();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
         run();
     }
 
@@ -55,7 +46,7 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
             Socket s = new Socket("localhost", 30970);
 
             out = new ObjectOutputStream(s.getOutputStream());
-            in = new ObjectInputStream(s.getInputStream());
+            ObjectInputStream in = new ObjectInputStream(s.getInputStream());
 
             createInterface();
 
@@ -99,7 +90,7 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
                 BigInteger[] encode = (BigInteger[]) in.readObject();
                 tReceived.setText(tReceived.getText() + " - Texte chiffré reçu par Alice" + "\n");
 
-                String decode = Functions.decode(encode, utilisateur.getExposantPublic(), utilisateur.getN());
+                String decode = Functions.decode(encode, utilisateur.getU(), utilisateur.getN());
                 tReceived.setText(tReceived.getText() + " - Texte déchiffré par Alice: " + decode + "\n");
 
                 bSend.setEnabled(true);
@@ -109,7 +100,7 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
             in.close();
             s.close();
 
-        } catch(Exception e) {
+        } catch(Exception ignored) {
         }
 
         System.exit(0);
@@ -153,8 +144,6 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
         setVisible(true);
     }
 
-
-
     @Override
     public void actionPerformed(ActionEvent arg0) {
         if (arg0.getSource() == bSend) {
@@ -187,33 +176,27 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
         try {
             out.writeUTF("QUIT");
             out.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ignored) {
         }
     }
 
     @Override
     public void windowClosed(WindowEvent windowEvent) {
-
     }
 
     @Override
     public void windowIconified(WindowEvent windowEvent) {
-
     }
 
     @Override
     public void windowDeiconified(WindowEvent windowEvent) {
-
     }
 
     @Override
     public void windowActivated(WindowEvent windowEvent) {
-
     }
 
     @Override
     public void windowDeactivated(WindowEvent windowEvent) {
-
     }
 }

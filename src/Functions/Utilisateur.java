@@ -26,7 +26,8 @@ public class Utilisateur {
     }
 
     public void setPrivateKey(BigInteger[] privateKey) {
-        u = privateKey[0];
+        n = privateKey[0];
+        u = privateKey[1];
     }
 
     public void setCorrespondant(BigInteger e, BigInteger n) {
