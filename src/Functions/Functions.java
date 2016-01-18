@@ -76,8 +76,8 @@ public class Functions {
     public static String decode(BigInteger[] decode, BigInteger u, BigInteger n) throws UnsupportedEncodingException {
         StringBuilder s = new StringBuilder();
 
-        for (BigInteger aDecode : decode) {
-            byte[] arrayByte = aDecode.modPow(u, n).toByteArray();
+        for (BigInteger d : decode) {
+            byte[] arrayByte = d.modPow(u, n).toByteArray();
             s.append(new String(arrayByte));
         }
         System.out.print("Déchiffrement: " + s.toString() + "\n");
