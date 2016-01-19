@@ -28,10 +28,11 @@ public class Bob {
             ServerSocket server = new ServerSocket(30970);
             Socket client = server.accept();
 
-            createKeys();
-
             ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(client.getInputStream());
+
+            if (in.readUTF().equals("CREATEKEY"))
+                createKeys();
 
             BigInteger eAlice =  (BigInteger) in.readObject();
             BigInteger nAlice =  (BigInteger) in.readObject();

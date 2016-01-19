@@ -37,7 +37,10 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
         utilisateur = new Utilisateur("Alice");
 
         // Création de la clef publique et privée
+        tReceived.setText(tReceived.getText() + " - Création des clefs publiques" + "\n");
         utilisateur.setPublicKey(Functions.createPublicKey());
+
+        tReceived.setText(tReceived.getText() + " - Création des clefs privées" + "\n");
         utilisateur.setPrivateKey(Functions.createPrivateKey(utilisateur.getN(), utilisateur.getExposantPublic(), utilisateur.getIndicatriceEuler()));
     }
 
@@ -50,12 +53,12 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
 
             createInterface();
 
+            out.writeUTF("CREATEKEY");
+            out.flush();
+
             createKeys();
 
-            tReceived.setText(tReceived.getText() + " - Création des clefs publiques" + "\n");
-            tReceived.setText(tReceived.getText() + " - Création des clefs privées" + "\n");
-
-            tReceived.setText(tReceived.getText() + " - Envoie de la clef publique d'Alice" + "\n");
+            tReceived.setText(tReceived.getText() + "\n - Envoie de la clef publique d'Alice" + "\n");
 
             out.writeObject(utilisateur.getExposantPublic());
             out.flush();

@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class Functions {
 
-    public static final int BIT_LENGTH_PUBLIC = 100;
+    public static final int BIT_LENGTH_PUBLIC = 2048;
 
     public static BigInteger[] createPublicKey() {
 
