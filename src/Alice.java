@@ -116,7 +116,7 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
         setTitle("Chiffrement RSA");
 
         // Affichage
-        tReceived = new JTextArea(20, 50);
+        tReceived = new JTextArea(30, 60);
         tReceived.setEditable(false);
         JScrollPane scroll = new JScrollPane(tReceived);
 
@@ -155,23 +155,19 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
         if (arg0.getSource() == bSend) {
             String text = tSend.getText().trim();
             if (text.length() > 0) {
-
-                tSend.setText("");
-                tSend.setEnabled(false);
-                bSend.setEnabled(false);
                 tReceived.setText(tReceived.getText() + "\n - Chiffrement du Texte: " + tSend.getText() + "\n");
-
                 try {
                     out.writeUTF("OK");
                     out.flush();
 
-                    out.writeObject(Functions.encode(text, utilisateur.getExposantPublicCorrespondant(), utilisateur.getNCorrespondant()));
+                    out.writeObject(Functions.encode(tSend.getText(), utilisateur.getExposantPublicCorrespondant(), utilisateur.getNCorrespondant()));
                     out.flush();
                 } catch (java.io.IOException e) {
-                    tSend.setEnabled(true);
-                    bSend.setEnabled(true);
                     tReceived.setText(tReceived.getText() + " - Erreur lors de l'encodage du mot: " + tSend.getText() + "\n");
                 }
+                tSend.setEnabled(false);
+                bSend.setEnabled(false);
+                tSend.setText("");
             }
         }
     }
