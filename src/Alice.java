@@ -153,20 +153,25 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
     @Override
     public void actionPerformed(ActionEvent arg0) {
         if (arg0.getSource() == bSend) {
-            if (tSend.getText().trim().length() > 0) {
+            String text = tSend.getText().trim();
+            if (text.length() > 0) {
+
+                tSend.setText("");
+                tSend.setEnabled(false);
+                bSend.setEnabled(false);
                 tReceived.setText(tReceived.getText() + "\n - Chiffrement du Texte: " + tSend.getText() + "\n");
+
                 try {
                     out.writeUTF("OK");
                     out.flush();
 
-                    out.writeObject(Functions.encode(tSend.getText(), utilisateur.getExposantPublicCorrespondant(), utilisateur.getNCorrespondant()));
+                    out.writeObject(Functions.encode(text, utilisateur.getExposantPublicCorrespondant(), utilisateur.getNCorrespondant()));
                     out.flush();
                 } catch (java.io.IOException e) {
+                    tSend.setEnabled(true);
+                    bSend.setEnabled(true);
                     tReceived.setText(tReceived.getText() + " - Erreur lors de l'encodage du mot: " + tSend.getText() + "\n");
                 }
-                tSend.setEnabled(false);
-                bSend.setEnabled(false);
-                tSend.setText("");
             }
         }
     }
