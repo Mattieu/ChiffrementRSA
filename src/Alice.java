@@ -46,7 +46,7 @@ public class Alice extends JFrame implements WindowListener, ActionListener {
 
     private void run () {
         try {
-            Socket s = new Socket("192.168.99.170", 30970);
+            Socket s = new Socket("192.168.99.199", 30970);
 
             out = new ObjectOutputStream(s.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(s.getInputStream());
