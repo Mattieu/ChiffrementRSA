@@ -29,20 +29,20 @@ public class Functions {
         return new BigInteger[]{n, e, m};
     }
 
-    public static BigInteger[] createPrivateKey(BigInteger n, BigInteger e, BigInteger m) {
+    public static BigInteger[] createPrivateKey(BigInteger n, BigInteger e, BigInteger r) {
 
-        BigInteger m0 = m;
+        BigInteger r0 = r;
         BigInteger u0 = BigInteger.valueOf(1);
         BigInteger u1 = BigInteger.valueOf(0);
         BigInteger v0 = BigInteger.valueOf(0);
         BigInteger v1 = BigInteger.valueOf(1);
 
 
-        while (!m.equals(BigInteger.ZERO)) {
-            BigInteger c = e.remainder(m);
-            BigInteger quotient = e.divide(m);
-            e = m;
-            m = c;
+        while (!r.equals(BigInteger.ZERO)) {
+            BigInteger c = e.remainder(r);
+            BigInteger quotient = e.divide(r);
+            e = r;
+            r = c;
             BigInteger nouveau_r = u0.subtract(quotient.multiply(v0));
             BigInteger nouveau_s = u1.subtract(quotient.multiply(v1));
             u0 = v0;
@@ -51,7 +51,7 @@ public class Functions {
             v1 = nouveau_s;
 
         }
-        BigInteger u = m0.add(u0);
+        BigInteger u = r0.add(u0);
 
         return new BigInteger[]{n,u};
     }
